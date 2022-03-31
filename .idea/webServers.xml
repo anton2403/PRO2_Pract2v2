@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="16c0bfa8-b6d0-41f4-a3e9-ecbdf430a9fe" name="Maquina_Referencia">
+        <fileTransfer accessType="SFTP" host="10.11.28.50" port="22" sshConfigId="a7e07708-ab00-4c59-965a-ee474cb67e4e" sshConfig="anton.lopez.nunez@udc.es@10.11.28.50:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

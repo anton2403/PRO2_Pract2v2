@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="Maquina_Referencia" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="Maquina_Referencia">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/UDC/100715/linux/FIC_BOX/P2" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

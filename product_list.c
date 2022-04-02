@@ -67,7 +67,7 @@ bool insertItem (tItemL d, tList *L) {
         q->next = LNULL;
         if (*L==LNULL) { //Tambien vale *L = last(L)
             *L = q;
-        } else if (d<(*L)->data) {
+        } else if (strcmp(d,(*L)->data)<0) { //} else if (d<(*L)->data) {
             q->next = *L;
             *L = q;
         } else {
@@ -137,7 +137,7 @@ void updateItem (tItemL d, tPosL p, tList *L){ //Cabecera de la función. Recibe
 
 tPosL findItem (tItemL d, tList L) {
     tPosL p;
-    for (p=L; (p!=LNULL) && (p->data<d); p=p->next);
+    for (p=L; (p!=LNULL) && (strcmp(p->data,d)<0); p=p->next);
     if (p!=LNULL && p->data==d) //Paramos en mitad de la lista porque encontramos el dato
         return p;
     else

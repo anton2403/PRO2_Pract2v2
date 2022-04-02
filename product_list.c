@@ -50,7 +50,39 @@ bool createNode (tPosL *p){ //Cabecera de la función. Recibe la posición donde
     return *p != LNULL; //Devolvemos true si se creo el nodo correctamente y false si no se pudo crear
 }
 
-bool insertItem (tItemL d, tPosL p, tList *L) { //Cabecera de la función. Recibe el item a insertar, la posicion donde insertarlo y la lista donde insertarlo (como variable dinamica (Porque se va a modificar y queremos que se mantengan los cambios tras acabar la funcion))
+tPosL findPosition (tList L, tItemL d) {
+    tPosL p;
+    p=L; //Tambien vale p=first(L)
+    while (p!=LNULL && p->data<d)
+        p=p->next; //Equivale a p=next(p,L)
+    return p;
+}
+
+bool insertItem (tItemL d, tList *L) {
+    tPosL p, q, r;//Una va a servir para crear el nodo, otra
+    if (!createNode(&q))
+        return false;
+    else {
+        q->data = d;
+        q->next = LNULL;
+        if (*L==LNULL) { //Tambien vale *L = last(L)
+            *L = q;
+        } else if (d<(*L)->data) {
+            q->next = *L;
+            *L = q;
+        } else {
+            p = findPosition(*L, d);
+            if (p == LNULL)
+                for(r = *L; r->next != LNULL; r=r->next)
+                    r->next = q;
+        }
+        q->data = p->data;
+        p->data = d;
+        q->next = p->next;
+        p->next = q;
+    }
+    return true;
+/*bool insertItem (tItemL d, tPosL p, tList *L) { //Cabecera de la función. Recibe el item a insertar, la posicion donde insertarlo y la lista donde insertarlo (como variable dinamica (Porque se va a modificar y queremos que se mantengan los cambios tras acabar la funcion))
     tPosL q, r; //Creamos variables locales. Punteros a un nodo
     if (!createNode(&q)) //Si no se pudo crear el nodo
         return false; //Devolver falso
@@ -76,6 +108,7 @@ bool insertItem (tItemL d, tPosL p, tList *L) { //Cabecera de la función. Recib
         }
     }
     return true; //Devolvemos cierto (se inserto correctamente)
+}*/
 }
 
 void deleteAtPosition (tPosL p, tList *L){ //Cabecera de la función. Recibe la posicion del elemento a eliminar y la lista donde se encuentra como variable dinamica (Porque se va a modificar y queremos que se mantengan los cambios tras acabar la funcion)
@@ -102,8 +135,16 @@ void updateItem (tItemL d, tPosL p, tList *L){ //Cabecera de la función. Recibe
     p->data = d; //Actualizamos el campo "data" del item que se encuentra en la posicion p, con los valores de d
 }
 
-tPosL findItem (tProductId d, tList L){ //Cabecera de la función. Recibe y la lista donde buscar el item
+tPosL findItem (tItemL d, tList L) {
+    tPosL p;
+    for (p=L; (p!=LNULL) && (p->data<d); p=p->next);
+    if (p!=LNULL && p->data==d) //Paramos en mitad de la lista porque encontramos el dato
+        return p;
+    else
+        return LNULL;
+/*tPosL findItem (tProductId d, tList L){ //Cabecera de la función. Recibe y la lista donde buscar el item
     tPosL p; //Creamos una variable local de tipo tPosL para recorrer la lista
     for (p=L; (p!=LNULL) && (strcmp(p->data.productId,d)!=0);p=p->next); //Recorremos la lista desde el principio, mientras p sea distinto de LNULL y el campo data de p no coincida con d
     return p; //Devuelve la posicion donde se encuentra el item (p).
+}*/
 }

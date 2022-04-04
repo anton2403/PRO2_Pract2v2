@@ -53,7 +53,7 @@ bool createNode (tPosL *p){ //Cabecera de la función. Recibe la posición donde
 tPosL findPosition (tList L, tItemL d) {
     tPosL p;
     p=L; //Tambien vale p=first(L)
-    while (p->next!=LNULL && p->next->data < d)
+    while (p->next!=LNULL && (strcmp(d,p->next->data) < 0))
         p=p->next; //Equivale a p=next(p,L)
     return p;
 }

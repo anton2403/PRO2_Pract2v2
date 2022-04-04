@@ -53,7 +53,7 @@ bool createNode (tPosL *p){ //Cabecera de la función. Recibe la posición donde
 tPosL findPosition (tList L, tItemL d) {
     tPosL p;
     p=L; //Tambien vale p=first(L)
-    while (p!=LNULL && p->data<d)
+    while (p->next!=LNULL && p->next->data < d)
         p=p->next; //Equivale a p=next(p,L)
     return p;
 }
@@ -72,43 +72,11 @@ bool insertItem (tItemL d, tList *L) {
             *L = q;
         } else {
             p = findPosition(*L, d);
-            if (p == LNULL)
-                for(r = *L; r->next != LNULL; r=r->next)
-                    r->next = q;
-        }
-        q->data = p->data;
-        p->data = d;
-        q->next = p->next;
-        p->next = q;
-    }
-    return true;
-/*bool insertItem (tItemL d, tPosL p, tList *L) { //Cabecera de la función. Recibe el item a insertar, la posicion donde insertarlo y la lista donde insertarlo (como variable dinamica (Porque se va a modificar y queremos que se mantengan los cambios tras acabar la funcion))
-    tPosL q, r; //Creamos variables locales. Punteros a un nodo
-    if (!createNode(&q)) //Si no se pudo crear el nodo
-        return false; //Devolver falso
-    else { //Si se pudo crear el nodo
-        q->data = d; //Introducimos el valor dado (d) en el campo "data" del nodo (struct) al que apunta q
-        q->next = LNULL; //Asignamos al campo "next" de q el valor LNULL
-        if (*L == LNULL) //Si el primer valor de la lista es LNULL
-            *L = q; //Asignamos el valor de q a *L
-        else if (p == LNULL) { //Si p es igual a LNULL
-            r = *L; //
-            while (r->next != LNULL) { //Mientras el siguiente de r sea distinto de LNULL:
-                r = r->next; //Avanzamos en la lista
-            }
-            r->next = q; //Asignamos al siguiente de r, el valor de q
-        } else if (p == *L) { //Si p es igual al primer valor de la lista
-            q->next = *L;
-            *L = q;
-        } else {
-            q->data = p->data;
-            p->data = d;
             q->next = p->next;
             p->next = q;
         }
+        return true;
     }
-    return true; //Devolvemos cierto (se inserto correctamente)
-}*/
 }
 
 void deleteAtPosition (tPosL p, tList *L){ //Cabecera de la función. Recibe la posicion del elemento a eliminar y la lista donde se encuentra como variable dinamica (Porque se va a modificar y queremos que se mantengan los cambios tras acabar la funcion)

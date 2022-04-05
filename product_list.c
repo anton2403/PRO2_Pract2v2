@@ -53,7 +53,7 @@ bool createNode (tPosL *p){ //Cabecera de la función. Recibe la posición donde
 tPosL findPosition (tList L, tItemL d) {
     tPosL p;
     p=L; //Tambien vale p=first(L)
-    while (p->next!=LNULL && (strcmp(d.productId,p->next->data.productId) < 0))
+    while (p->next!=LNULL && (strcmp(d.productId,p->next->data.productId) > 0))
         p=p->next; //Equivale a p=next(p,L)
     return p;
 }
@@ -65,9 +65,9 @@ bool insertItem (tItemL d, tList *L) {
     else {
         q->data = d;
         q->next = LNULL;
-        if (*L==LNULL) { //Tambien vale *L = last(L)
+        if (*L==LNULL) { //Tambien vale *L = last(L). Insertar lista vacia
             *L = q;
-        } else if (strcmp(d.productId,(*L)->data.productId)<0) { //} else if (d<(*L)->data) {
+        } else if (strcmp(d.productId,(*L)->data.productId)<0) {
             q->next = *L;
             *L = q;
         } else {
@@ -106,7 +106,7 @@ void updateItem (tItemL d, tPosL p, tList *L){ //Cabecera de la función. Recibe
 tPosL findItem (tProductId d, tList L) {
     tPosL p;
     for (p=L; (p!=LNULL) && (strcmp(p->data.productId,d)<0); p=p->next);
-    if (p!=LNULL && strcmp(p->data.productId,d)<0) //Paramos en mitad de la lista porque encontramos el dato
+    if (p!=LNULL && strcmp(p->data.productId,d) == 0) //Paramos en mitad de la lista porque encontramos el dato
         return p;
     else
         return LNULL;

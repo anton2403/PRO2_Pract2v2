@@ -53,7 +53,7 @@ bool createNode (tPosL *p){ //Cabecera de la función. Recibe la posición donde
 tPosL findPosition (tList L, tItemL d) {
     tPosL p;
     p=L; //Tambien vale p=first(L)
-    while (p->next!=LNULL && (strcmp(d,p->next->data) < 0))
+    while (p->next!=LNULL && (strcmp(d.productId,p->next->data.productId) < 0))
         p=p->next; //Equivale a p=next(p,L)
     return p;
 }
@@ -67,7 +67,7 @@ bool insertItem (tItemL d, tList *L) {
         q->next = LNULL;
         if (*L==LNULL) { //Tambien vale *L = last(L)
             *L = q;
-        } else if (strcmp(d,(*L)->data)<0) { //} else if (d<(*L)->data) {
+        } else if (strcmp(d.productId,(*L)->data.productId)<0) { //} else if (d<(*L)->data) {
             q->next = *L;
             *L = q;
         } else {
@@ -103,16 +103,11 @@ void updateItem (tItemL d, tPosL p, tList *L){ //Cabecera de la función. Recibe
     p->data = d; //Actualizamos el campo "data" del item que se encuentra en la posicion p, con los valores de d
 }
 
-tPosL findItem (tItemL d, tList L) {
+tPosL findItem (tProductId d, tList L) {
     tPosL p;
-    for (p=L; (p!=LNULL) && (strcmp(p->data,d)<0); p=p->next);
-    if (p!=LNULL && p->data==d) //Paramos en mitad de la lista porque encontramos el dato
+    for (p=L; (p!=LNULL) && (strcmp(p->data.productId,d)<0); p=p->next);
+    if (p!=LNULL && strcmp(p->data.productId,d)<0) //Paramos en mitad de la lista porque encontramos el dato
         return p;
     else
         return LNULL;
-/*tPosL findItem (tProductId d, tList L){ //Cabecera de la función. Recibe y la lista donde buscar el item
-    tPosL p; //Creamos una variable local de tipo tPosL para recorrer la lista
-    for (p=L; (p!=LNULL) && (strcmp(p->data.productId,d)!=0);p=p->next); //Recorremos la lista desde el principio, mientras p sea distinto de LNULL y el campo data de p no coincida con d
-    return p; //Devuelve la posicion donde se encuentra el item (p).
-}*/
 }

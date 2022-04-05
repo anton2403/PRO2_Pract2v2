@@ -17,7 +17,7 @@
 #define LNULL NULL
 
 #include "types.h"
-
+#include "bid_stack.h"
 
 typedef struct tItemL {
     tUserId seller;
@@ -146,7 +146,7 @@ void updateItem (tItemL d, tPosL p, tList *L);
  Precondiciones: La lista está inicializada y position es una posicion valida de la lista
  */
 
-tPosL findItem (tItemL d, tList L);
+tPosL findItem (tProductId d, tList L);
 /*
  Objetivo: Busca el primer elemento con cierto contenido en la lista
  Entradas:

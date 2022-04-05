@@ -24,6 +24,7 @@ void new (char *param1, char *param2, char *param3, char *param4, tItemL *L) { /
     if (findItem(param1,L)!=LNULL) { //Si existe un producto en la lista con ese identificador (param1), no podemos insertar otro
         printf("+ Error: New not possible\n"); //Imprimimos un error para indicar que no se completo la operacion
     } else {
+        createEmptyStack (&L->bidStack);
         newItem.bidCounter = 0;
         strcpy(newItem.seller, param2); //Copiamos el valor de param2 en el campo "seller" del struct tItemL d
         strcpy(newItem.productId, param1); //Copiamos el valor de param1 en el campo "productId" del struct tItemL d
@@ -39,6 +40,7 @@ void new (char *param1, char *param2, char *param3, char *param4, tItemL *L) { /
         insertItem (newItem, L);//Insertamos el tItemL d con los valores correspondientes en la lista
     }
 }
+
 
 
 void processCommand(char *commandNumber, char command, char *param1, char *param2, char *param3, char *param4, tItemL *L) {

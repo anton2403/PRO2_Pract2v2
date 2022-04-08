@@ -44,7 +44,6 @@ void createEmptyList (tList *L);
  Salidas: Una lista vacia
  Postcondiciones: Lista queda inicializada y no contiene elementos
  */
-
 bool isEmptyList (tList L);
 /*
  Objetivo: Determina si la lista está vacia
@@ -54,7 +53,6 @@ bool isEmptyList (tList L);
     Verdadero si la lista esta vacia y falso en caso contrario
  Precondiciones: La lista debe estar inicializada
  */
-
 tPosL first(tList L);
 /*
  Objetivo: Devuelve la posición del primer elemento de la lista
@@ -64,7 +62,6 @@ tPosL first(tList L);
     Position: Posición del primer elemento
  Precondiciones: La lista está inicializada y no esta vacia
  */
-
 tPosL last(tList L);
 /*
  Objetivo: Devuelve la posición del ultimo elemento de la lista
@@ -74,10 +71,9 @@ tPosL last(tList L);
     Position: Posición del ultimo elemento
  Precondiciones: La lista está inicializada y no esta vacia
  */
-
 tPosL next(tPosL p, tList L);
 /*
- Objetivo: Devuelve la posición en la lista del elemento siguiente al de la posicion indicada (O LNULL si la posicion n
+ Objetivo: Devuelve la posición en la lista del elemento siguiente al de la posicion indicada (O LNULL si la posicion no
  tiene siguiente)
  Entradas:
     Position: Posicion del elemento actual
@@ -86,7 +82,6 @@ tPosL next(tPosL p, tList L);
     Position: Posición del elemento siguiente o nulo si es el ultimo
  Precondiciones: La lista está inicializada y postion es una posicion valida de la lista
  */
-
 tPosL previous(tPosL p, tList L);
 /*
  Objetivo: Devuelve la posicion en la lista del elemento anterior al de la posicion indicada (o LNULL si no tiene anterior)
@@ -97,7 +92,6 @@ tPosL previous(tPosL p, tList L);
     Position: Posición del elemento anterior o nulo si es el primero
  Precondiciones: La lista está inicializada y position es una posicion valida de la lista
  */
-
 bool insertItem (tItemL d, tList *L);
 /*
  Objetivo: Inserta un elemento en la Lista de forma ordenada por el campo productId. Devuelve
@@ -110,7 +104,6 @@ bool insertItem (tItemL d, tList *L);
     Bool: Devuelve True si el elemento fue insertado, y devuelve False si no fue insertado
  Postcondiciones: Las posiciones de los elementos de la lista posteriores a la del elemento insertado pueden haber variado
  */
-
 void deleteAtPosition (tPosL p, tList *L);
 /*
  Objetivo: Elimina de la lista el elemento que ocupa la posición indicada
@@ -122,7 +115,6 @@ void deleteAtPosition (tPosL p, tList *L);
  Precondiciones: La posición indicada es una posición válida en la lista y el producto en dicha posición tiene una pila de pujas vacía
  Postcondiciones: Las posiciones de los elementos de la lista posteriores a la de la posición eliminada pueden haber variado
  */
-
 tItemL getItem (tPosL p, tList L);
 /*
  Objetivo: Recupera el contenido de un elemento de la lista
@@ -133,7 +125,6 @@ tItemL getItem (tPosL p, tList L);
     Item: Contenido del elemento que esta en Position
  Precondiciones: La lista está inicializada y position es una posicion valida de la lista
  */
-
 void updateItem (tItemL d, tPosL p, tList *L);
 /*
  Objetivo: Modifica el contenido de un elemento de la lista.
@@ -145,7 +136,6 @@ void updateItem (tItemL d, tPosL p, tList *L);
     List: Lista con el contenido del elemento modificado
  Precondiciones: La lista está inicializada y position es una posicion valida de la lista
  */
-
 tPosL findItem (tProductId d, tList L);
 /*
  Objetivo: Busca el primer elemento con cierto contenido en la lista
@@ -156,5 +146,4 @@ tPosL findItem (tProductId d, tList L);
     Position: Posición del elemento encontrado o nulo si no se encuentra
  Precondiciones: La lista está inicializada
  */
-
 #endif

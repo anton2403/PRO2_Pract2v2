@@ -1,6 +1,6 @@
 /*
  * TITLE: PROGRAMMING II LABS
- * SUBTITLE: Practical 2
+ * SUBTITLE: Practica 2
  * AUTHOR 1: ***************************** LOGIN 1: **********
  * AUTHOR 2: ***************************** LOGIN 2: **********
  * GROUP: *.*
@@ -37,36 +37,45 @@ void new (char *param1, char *param2, char *param3, char *param4, tItemL *L) { /
         }
         newItem.productPrice = atof(param4); //Pasamos el param4 (char) a float y lo cambiamos en el tItemL d, en el campo del precio
 
-        insertItem (newItem, L);//Insertamos el tItemL d con los valores correspondientes en la lista
+        insertItem (newItem, L);//Insertamos el tItemL d con los valores correspondientes
     }
 }
 
 
 
 void processCommand(char *commandNumber, char command, char *param1, char *param2, char *param3, char *param4, tItemL *L) {
-
+    printf("********************\n");
+    printf("%s ", commandNumber);
     switch (command) {
         case 'N':
-            new ( *param1,  *param2,  *param3,  *param4,  L);
+            printf("N: product %s seller %s category %s price %s\n", param1, param2, param3, param4); //Imprimimos la cabecera de la funcion new
+            new (param1, param2, param3, param4, L);
             break;
         case 'S':
+
             break;
         case 'B':
+
             break;
         case 'D':
+
             break;
         case 'A':
+
             break;
         case 'W':
+
             break;
         case 'R':
+
             break;
         default:
+
             break;
     }
 }
 
-void readTasks(char *filename, lista01) {
+void readTasks(char *filename, tList lista01) {
     FILE *f = NULL;
     char *commandNumber, *command, *param1, *param2, *param3, *param4;
     const char delimiters[] = " \n\r";

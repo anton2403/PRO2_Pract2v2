@@ -1,6 +1,6 @@
 /*
  * TITLE: PROGRAMMING II LABS
- * SUBTITLE: Practical 2
+ * SUBTITLE: Practica 2
  * AUTHOR 1: Ruben Seoane Iglesias LOGIN 1: r.seoane.iglesias
  * AUTHOR 2: Anton Lopez Nunez LOGIN 2: anton.lopez.nunez
  * GROUP: *2.4*

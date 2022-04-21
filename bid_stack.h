@@ -14,7 +14,7 @@
 
 #include <stdbool.h>
 #define SNULL -1
-#define SMAX 1000
+#define SMAX 25
 
 typedef struct {
     tUserId bidder;

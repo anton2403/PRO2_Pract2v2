@@ -18,6 +18,7 @@
 //Cabeceras
 void new (char *param1, char *param2, char *param3, char *param4, tList *L);
 void stats (tList L);
+void bid (char *position, char *param2, char *preciopuja, tList *L);
 
 void new (char *param1, char *param2, char *param3, char *param4, tList *L) { //Cabecera de la función. Recibe el identificador del nuevo producto (param1), el vendedor del producto (param2), la categoría (param3) y el precio (param4)
     tItemL newItem;
@@ -123,34 +124,24 @@ void bid (char *position, char *param2, char *preciopuja, tList *L) { //Cabecera
     tItemL bidItem = getItem(r, *L); // Buscamos el item a modificar en la posicion dada (devuelve una copia del item)
     tItemS elementoCima = peek(bidItem.bidStack);
 
-    if ( (r == LNULL) || (strcmp(bidItem.seller, param2) == 0) || (price <= elementoCima.productPrice) || (bidItem.bidCounter == 25) )  { //Si el vendedor del producto es el
-        //Mismo que el pujador, el precio de la puja no es superior a la puja mas alta o la pila estuviese llena, entonces:
+    if ( (r == LNULL) || (strcmp(bidItem.seller, param2) == 0) || (price <= elementoCima.productPrice) || (bidItem.bidCounter == 25) )  { //Si no existe un producto con ese identificador,
+        //el vendedor del producto es el mismo que el pujador, el precio de la puja no es superior a la puja mas alta o la pila estuviese llena, entonces:
         printf("+ Error: Bid not possible\n"); //Imprime el mensaje de error
     } else { //Si no se cumple ninguna de las condiciones anteriores:
 
-        if (isEmptyStack(bidItem.bidStack)) //No hay pujas y la nueva puja supera al precio original
-            if ((price > bidItem.productPrice)) {
+        if ( (isEmptyStack(bidItem.bidStack) && (price > bidItem.productPrice)) || (!isEmptyStack(bidItem.bidStack) && (price > elementoCima.productPrice)) ) {
+            //Si no hay pujas y la nueva puja supera al precio original o si hay pujas y la nueva puja supera a la puja mas alta, entonces
                 strcpy(nuevaPuja.bidder, param2); //Añadimos el usuario que hizo la nueva puja
                 nuevaPuja.productPrice = price; //Añadimos el precio de la nueva puja
                 push(nuevaPuja, &bidItem.bidStack); //Guardamos la nueva puja
                 bidItem.bidCounter ++; //actualizamos el contador de pujas
-                updateItem(bidItem,r,L);
+                updateItem(bidItem,r,L); //Actualizamos el item en el que añadimos la nueva puja y modificamos el contador de pujas
+
                 if (bidItem.productCategory == book) //Si la categoria es book
                     printf("* Bid: product %s bidder %s category book price %.2f bids %d\n", bidItem.productId, nuevaPuja.bidder, nuevaPuja.productPrice, bidItem.bidCounter); // imprime el mensaje con categoria "book"
-                else // realiza esta otra accion si la categoria es painting
+                else //Si no es book, imprimimos el mismo mensaje cambiando la categoria por painting
                     printf("* Bid: product %s bidder %s category painting price %.2f bids %d\n", bidItem.productId, nuevaPuja.bidder, nuevaPuja.productPrice, bidItem.bidCounter); // imprime el mensaje con categoria "painting"
-
-            } else printf("+ Error: Bid not possible\n");
-
-        else //Si hay pujas
-
-        if ((price > elementoCima.productPrice)) { //Y la nueva puja supera a la puja mas alta (la de la cima de bidStack)
-            strcpy(nuevaPuja.bidder, param2); //Añadimos el usuario que hizo la nueva puja
-            nuevaPuja.productPrice = price; //Añadimos el precio de la nueva puja
-            push(nuevaPuja, &bidItem.bidStack); //Guardamos la nueva puja
-            bidItem.bidCounter ++;//Actualizamos el contador de pujas
-            updateItem(bidItem, r, L); // aplicamos los cambios a la lista
-        } else printf ("+ Error: Bid not possible\n");
+        } else printf("+ Error: Bid not possible\n");
     }
 }
 

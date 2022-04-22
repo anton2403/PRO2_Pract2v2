@@ -4,13 +4,13 @@
  * AUTHOR 1: Ruben Seoane Iglesias LOGIN 1: r.seoane.iglesias
  * AUTHOR 2: Anton Lopez Nunez LOGIN 2: anton.lopez.nunez
  * GROUP: *2.4*
- * DATE:  /  /
+ * DATE:  29/04/2022
  */
 
 #include "bid_stack.h" //Incluimos el .h
 
 void createEmptyStack (tStack *stack) {
-    stack->top = SNULL;
+    stack->top = SNULL; //Inicializa el elemento en la cima a nulo
 }
 
 bool isEmptyStack (tStack stack) {
@@ -18,7 +18,7 @@ bool isEmptyStack (tStack stack) {
 }
 
 tItemS peek (tStack stack) { //Consultar la cima de la pila
-    return stack.data[stack.top]; //stack.top es el índice del primer elemento de la lista
+    return stack.data[stack.top]; //Devuelve el campo data correspondiente a stack.top, que es el índice del primer elemento de la lista
 }
 
 void pop (tStack *stack) { //Elimina el primer elemento
@@ -28,10 +28,9 @@ void pop (tStack *stack) { //Elimina el primer elemento
 bool push (tItemS d, tStack *stack) {
     if (stack->top == SMAX-1) //Top ya está ariba (no podemos insertar mas)
         return false; //Devolvemos falso
-    else {
-        stack->top ++; //
-        stack->data[stack->top] = d;
-        return true;
+    else { //Si no
+        stack->top ++; //Movemos el top una posicion
+        stack->data[stack->top] = d; //Insertamos d en el nuevo top, que corresponde al indice anterior al que acabamos de mover
+        return true; //Devolvemos verdadero
     }
 }
-

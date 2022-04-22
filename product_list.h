@@ -4,7 +4,7 @@
  * AUTHOR 1: Ruben Seoane Iglesias LOGIN 1: r.seoane.iglesias
  * AUTHOR 2: Anton Lopez Nunez LOGIN 2: anton.lopez.nunez
  * GROUP: *2.4*
- * DATE:  /  /
+ * DATE:  29/04/2022
  */
 
 #ifndef PRODUCT_LIST_H
@@ -97,7 +97,7 @@ bool insertItem (tItemL d, tList *L);
  Objetivo: Inserta un elemento en la Lista de forma ordenada por el campo productId. Devuelve
            un valor True si el elemento fue insertado, False en caso contrario.
  Entradas:
-    Item: Contenido del elemento a insetar
+    Item: Elemento a insetar
     List: Lista donde vamos a insertar
  Salidas:
     List: Lista con el elemento Item insertado
@@ -140,7 +140,7 @@ tPosL findItem (tProductId d, tList L);
 /*
  Objetivo: Busca el primer elemento con cierto contenido en la lista
  Entradas:
-    Item: Contenido del elemento buscado
+    tProductId d: Contenido del elemento buscado
     List: Lista donde realizar la búsqueda
  Salidas:
     Position: Posición del elemento encontrado o nulo si no se encuentra

@@ -1,10 +1,10 @@
 /*
  * TITLE: PROGRAMMING II LABS
- * SUBTITLE: Practical 2
- * AUTHOR 1: ***************************** LOGIN 1: **********
- * AUTHOR 2: ***************************** LOGIN 2: **********
- * GROUP: *.*
- * DATE: ** / ** / **
+ * SUBTITLE: Practica 2
+ * AUTHOR 1: Ruben Seoane Iglesias LOGIN 1: r.seoane.iglesias
+ * AUTHOR 2: Anton Lopez Nunez LOGIN 2: anton.lopez.nunez
+ * GROUP: *2.4*
+ * DATE:  29/04/2022
  */
 
 #ifndef BID_STACK_H
@@ -40,9 +40,9 @@ void createEmptyStack (tStack *stack);
 bool push (tItemS d, tStack *stack);
 /*
  Objetivo: Inserta un elemento encima de la pila.
-           Devuelve un valor True si el elemento fue apilado, y un valor False si no fue apilado
+           Devuelve un valor True si el elemento fue apilado, y un valor False en caso contrario
  Entradas:
-    Item: Contenido del elemento a insetar (variable d tipo tItemS)
+    Item: Contenido del elemento a insertar (variable d tipo tItemS)
     Stack: Pila donde vamos a insertar
  Salidas:
     Stack: Pila con el elemento Item insertado

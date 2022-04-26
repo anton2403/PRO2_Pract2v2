@@ -16,9 +16,24 @@
 
 #define MAX_BUFFER 255
 //Cabeceras
+void deleteProduct (tPosL d, tList *L);
+
 void new (char *param1, char *param2, char *param3, char *param4, tList *L);
 void stats (tList L);
 void bid (char *position, char *param2, char *preciopuja, tList *L);
+void delete (char *param1, tList *L);
+void award (char *param1, tList *L);
+void withdraw (char *param1, char *param2, tList *L);
+
+void deleteProduct (tPosL d, tList *L) { //Esta funcion elimina un producto tras vaciar su pila
+    tItemL Item = getItem (d, *L);
+
+    while(isEmptyStack(Item.bidStack)==false) //Mientras la pila de pujas no este vacia
+        pop (&Item.bidStack); //Borrar el elemento de la cima
+
+    updateItem(Item, d, L); //Actualizamos el Item con la pila de pujas vacia
+    deleteAtPosition(d, L); //Despues de vaciar la pila (con el while), eliminamos el elemento
+}
 
 void new (char *param1, char *param2, char *param3, char *param4, tList *L) { //Cabecera de la función. Recibe el identificador del nuevo producto (param1), el vendedor del producto (param2), la categoría (param3) y el precio (param4)
     tItemL newItem;
@@ -44,7 +59,7 @@ void new (char *param1, char *param2, char *param3, char *param4, tList *L) { //
 }
 
 void stats (tList L) { //Cabecera de la función. Solo recibe la lista y no la va a modificar, solo a leerla
-    tPosL i; //Creamos una variable tipo tPosL para recorrer la lista
+    tPosL i=0; //Creamos una variable tipo tPosL para recorrer la lista
     int countBook = 0, countPainting = 0; //countBook = contador numero de productos tipo book, countPainting = contador numero de productos tipo painting
     float avgBook, avgPainting, sumBook = 0, sumPainting = 0; //Creamos las variables necesarias para almacenar las operaciones que luego mostraremos
     //avgBook = precio medio de los productos tipo "book"; avgPainting = precio medio de los productos tipo "painting"; sumBook = suma de todos los precios de los productos tipo "book"; sumPainting = suma de todos los precios de los productos tipo "painting"
@@ -56,7 +71,8 @@ void stats (tList L) { //Cabecera de la función. Solo recibe la lista y no la v
         printf("+ Error: Stats not possible\n"); //Imprimimos el mensaje de que la funcion no es realizable
     } else { //Si no esta vacia:
         for (i = first(L); i!=LNULL; i=next(i,L)) { //Recorremos la lista, desde el principio hasta el final
-            tItemL item = getItem(i,L); //Cogemos el elemento correspondiente a la posicion tPosL i y lo asignamos a la variable "item"
+            tItemL item = getItem(i,L); //Cogemos
+            // el elemento correspondiente a la posicion tPosL i y lo asignamos a la variable "item"
             if (item.bidCounter == 0) //Si la pila esta vacia (no hay ninguna puja hecha)
                 if (item.productCategory == book) //Y la categoria es book
                     printf("Product %s seller %s category book price %.2f. No bids\n", item.productId, item.seller, item.productPrice);
@@ -121,16 +137,19 @@ void bid (char *position, char *param2, char *preciopuja, tList *L) { //Cabecera
 
     printf("B: product %s bidder %s price %.2f\n", position, param2, price); //Imprimimos la cabecera de la funcion
 
-    tItemL bidItem = getItem(r, *L); // Buscamos el item a modificar en la posicion dada (devuelve una copia del item)
-    tItemS elementoCima = peek(bidItem.bidStack);
-
-    if ( (r == LNULL) || (strcmp(bidItem.seller, param2) == 0) || (price <= elementoCima.productPrice) || (bidItem.bidCounter == 25) )  { //Si no existe un producto con ese identificador,
-        //el vendedor del producto es el mismo que el pujador, el precio de la puja no es superior a la puja mas alta o la pila estuviese llena, entonces:
+    if (r==LNULL) {
         printf("+ Error: Bid not possible\n"); //Imprime el mensaje de error
-    } else { //Si no se cumple ninguna de las condiciones anteriores:
+    } else {
+        tItemL bidItem = getItem(r,*L); // Buscamos el item a modificar en la posicion dada (devuelve una copia del item)
+        tItemS elementoCima = peek(bidItem.bidStack);
 
-        if ( (isEmptyStack(bidItem.bidStack) && (price > bidItem.productPrice)) || (!isEmptyStack(bidItem.bidStack) && (price > elementoCima.productPrice)) ) {
-            //Si no hay pujas y la nueva puja supera al precio original o si hay pujas y la nueva puja supera a la puja mas alta, entonces
+        if ( (strcmp(bidItem.seller, param2) == 0) || (price <= elementoCima.productPrice) || (bidItem.bidCounter == 25) )  { //Si no existe un producto con ese identificador,
+            //el vendedor del producto es el mismo que el pujador, el precio de la puja no es superior a la puja mas alta o la pila estuviese llena, entonces:
+            printf("+ Error: Bid not possible\n"); //Imprime el mensaje de error
+        } else { //Si no se cumple ninguna de las condiciones anteriores:
+
+            if ( (isEmptyStack(bidItem.bidStack) && (price > bidItem.productPrice)) || (!isEmptyStack(bidItem.bidStack) && (price > elementoCima.productPrice)) ) {
+                //Si no hay pujas y la nueva puja supera al precio original o si hay pujas y la nueva puja supera a la puja mas alta, entonces
                 strcpy(nuevaPuja.bidder, param2); //Añadimos el usuario que hizo la nueva puja
                 nuevaPuja.productPrice = price; //Añadimos el precio de la nueva puja
                 push(nuevaPuja, &bidItem.bidStack); //Guardamos la nueva puja
@@ -141,8 +160,69 @@ void bid (char *position, char *param2, char *preciopuja, tList *L) { //Cabecera
                     printf("* Bid: product %s bidder %s category book price %.2f bids %d\n", bidItem.productId, nuevaPuja.bidder, nuevaPuja.productPrice, bidItem.bidCounter); // imprime el mensaje con categoria "book"
                 else //Si no es book, imprimimos el mismo mensaje cambiando la categoria por painting
                     printf("* Bid: product %s bidder %s category painting price %.2f bids %d\n", bidItem.productId, nuevaPuja.bidder, nuevaPuja.productPrice, bidItem.bidCounter); // imprime el mensaje con categoria "painting"
-        } else printf("+ Error: Bid not possible\n");
+            } else printf("+ Error: Bid not possible\n");
+        }
     }
+
+}
+
+void delete (char *param1, tList *L) {
+    tPosL r=0; //Creamos una variable local para localizar el elemento
+    r = findItem(param1, *L); //Localizamos el item con tProductId = param1
+    if (r!=LNULL) {
+        tItemL Item = getItem (r, *L); //Almacenamos el item buscado en la variable Item de tipo tItemL
+        deleteProduct(r, L); //Eliminamos el elemento tras vaciar su pila
+        if (Item.productCategory == book) //Si la categoria es book
+            printf("* Delete: product %s seller %s category book price %.2f bids %d\n", Item.productId, Item.seller, Item.productPrice, Item.bidCounter);
+        else //Si no es book, imprimimos el mismo mensaje cambiando la categoria por painting
+            printf("* Delete: product %s seller %s category painting price %.2f bids %d\n", Item.productId, Item.seller, Item.productPrice, Item.bidCounter);
+
+    } else printf("+ Error: Delete not possible\n");
+}
+
+void award (char *param1, tList *L) {
+    tPosL r; //Creamos una variable local para localizar el elemento
+    tItemS TopPuja;
+    float precioFinal=0;
+
+    r = findItem(param1, *L); //Localizamos el item con tProductId = param1
+
+    if (r==LNULL) {
+        printf("+ Error: Award not possible\n");
+    } else {
+        tItemL Item = getItem(r, *L);
+        if (!isEmptyStack(Item.bidStack)) {
+            TopPuja = peek(Item.bidStack); //Almacenamos la puja mas alta
+            precioFinal = TopPuja.productPrice; //Almacenamos el precio de la puja mas alta
+            if (Item.productCategory == book) //Y la categoria es book
+                printf("* Award: product %s bidder %s category book price %.2f\n", Item.productId, TopPuja.bidder, precioFinal); //Imprimimos el mensaje
+            else //Si no es book, imprimimos el mismo mensaje cambiando la categoria por painting
+                printf("* Award: product %s bidder %s category painting price %.2f\n", Item.productId, TopPuja.bidder, precioFinal); //Imprimimos el mensaje
+            deleteProduct(r, L); //Eliminamos el elemento tras vaciar su pila
+        } else printf("+ Error: Award not possible\n");
+    }
+}
+
+void withdraw (char *param1, char *param2, tList *L) {
+    tPosL pos = findItem(param1, *L);
+    if (pos==LNULL) {
+        printf("+ Error: withdraw not possible\n");
+    } else {
+        tItemL Item = getItem(pos, *L);
+        tItemS topPuja = peek(Item.bidStack);
+        if ( (isEmptyStack(Item.bidStack)) || (strcmp (param2, topPuja.bidder)!=0) )
+            printf("+ Error: withdraw not possible\n");
+        else {
+            if (Item.productCategory == book) //Si la categoria es book
+                printf("* Withdraw: product %s bidder %s category book price %.2f bids %d\n", Item.productId, topPuja.bidder, topPuja.productPrice, Item.bidCounter);
+            else //Si no es book, imprimimos el mismo mensaje cambiando la categoria por painting
+                printf("* Withdraw: product %s bidder %s category painting price %.2f bids %d\n", Item.productId, topPuja.bidder, topPuja.productPrice, Item.bidCounter);
+            pop(&Item.bidStack);
+            Item.bidCounter --;
+            updateItem(Item, pos, L);
+        }
+    }
+
 }
 
 void processCommand(char *commandNumber, char command, char *param1, char *param2, char *param3, char *param4, tList *L) {
@@ -161,13 +241,16 @@ void processCommand(char *commandNumber, char command, char *param1, char *param
             bid (param1, param2, param3, L);
             break;
         case 'D':
-
+            printf("D: product %s\n", param1);
+            delete (param1, L);
             break;
         case 'A':
-
+            printf("A: product %s\n", param1);
+            award (param1, L);
             break;
         case 'W':
-
+            printf("W: product %s bidder %s\n", param1, param2);
+            withdraw (param1, param2, L);
             break;
         case 'R':
 
@@ -212,7 +295,7 @@ int main(int nargs, char **args) {
     tList lista01; //Creamos la variable lista01 de tipo tList
     createEmptyList(&lista01); //Creamos e inicializamos una lista vacia y la almacenamos en la variable lista01
 
-    char *file_name = "bid.txt";
+    char *file_name = "withdraw.txt";
 
     if (nargs > 1) {
         file_name = args[1];

@@ -17,13 +17,13 @@
 #define MAX_BUFFER 255
 //Cabeceras
 void deleteProduct (tPosL d, tList *L);
-
 void new (char *param1, char *param2, char *param3, char *param4, tList *L);
 void stats (tList L);
 void bid (char *position, char *param2, char *preciopuja, tList *L);
 void delete (char *param1, tList *L);
 void award (char *param1, tList *L);
 void withdraw (char *param1, char *param2, tList *L);
+void Remove (tList *L);
 
 void deleteProduct (tPosL d, tList *L) { //Esta funcion elimina un producto tras vaciar su pila
     tItemL Item = getItem (d, *L);
@@ -167,7 +167,7 @@ void bid (char *position, char *param2, char *preciopuja, tList *L) { //Cabecera
 }
 
 void delete (char *param1, tList *L) {
-    tPosL r=0; //Creamos una variable local para localizar el elemento
+    tPosL r; //Creamos una variable local para localizar el elemento
     r = findItem(param1, *L); //Localizamos el item con tProductId = param1
     if (r!=LNULL) {
         tItemL Item = getItem (r, *L); //Almacenamos el item buscado en la variable Item de tipo tItemL
@@ -225,35 +225,67 @@ void withdraw (char *param1, char *param2, tList *L) {
 
 }
 
+void Remove (tList *L) {
+    tPosL i, anterior; //Creamos una variable local para recorrer la lista
+    int count=0;
+
+    if (isEmptyList(*L)) {
+        printf("+ Error: Remove not possible\n");
+    } else {
+        for (i = first(*L); i!=LNULL;) {
+            tItemL Item =  getItem(i, *L);
+            if (Item.bidCounter==0) {
+                anterior = previous(i, *L);
+                deleteProduct(i, L);
+                if (anterior==LNULL) {
+                    if (isEmptyList(*L)){
+                        i = LNULL;
+                    } else i = first(*L);
+                } else i = next(anterior, *L);
+                if (Item.productCategory == book) //Si la categoria es book
+                    printf("Removing product %s seller %s category book price %.2f bids %d\n", Item.productId, Item.seller, Item.productPrice, Item.bidCounter); // imprime el mensaje con categoria "book"
+                else //Si no es book, imprimimos el mismo mensaje cambiando la categoria por painting
+                    printf("Removing product %s seller %s category painting price %.2f bids %d\n", Item.productId, Item.seller, Item.productPrice, Item.bidCounter); // imprime el mensaje con categoria "painting"
+            } else {
+                i = next(i,*L);
+                count ++;
+            }
+        }
+        if (count==0) printf("+ Error: Remove not possible\n");
+    }
+
+}
+
 void processCommand(char *commandNumber, char command, char *param1, char *param2, char *param3, char *param4, tList *L) {
     printf("********************\n");
     printf("%s ", commandNumber);
     switch (command) {
         case 'N':
-            printf("N: product %s seller %s category %s price %s\n", param1, param2, param3, param4); //Imprimimos la cabecera de la funcion new
+            printf("N: product %s seller %s category %s price %s\n", param1, param2, param3, param4); //Imprimimos la cabecera de new
             new (param1, param2, param3, param4, L);
             break;
         case 'S':
-            printf("S\n"); //Imprimimos la cabecera de la funcion
+            printf("S\n"); //Imprimimos la cabecera de stats
             stats (*L);
             break;
         case 'B':
             bid (param1, param2, param3, L);
             break;
         case 'D':
-            printf("D: product %s\n", param1);
+            printf("D: product %s\n", param1); //Imprimimos la cabecera de delete
             delete (param1, L);
             break;
         case 'A':
-            printf("A: product %s\n", param1);
+            printf("A: product %s\n", param1); //Imprimimos la cabecera de award
             award (param1, L);
             break;
         case 'W':
-            printf("W: product %s bidder %s\n", param1, param2);
+            printf("W: product %s bidder %s\n", param1, param2); //Imprimimos la cabecera de withdraw
             withdraw (param1, param2, L);
             break;
         case 'R':
-
+            printf("R\n"); //Imprimimos la cabecera de remove
+            Remove (L);
             break;
         default:
 
@@ -295,7 +327,7 @@ int main(int nargs, char **args) {
     tList lista01; //Creamos la variable lista01 de tipo tList
     createEmptyList(&lista01); //Creamos e inicializamos una lista vacia y la almacenamos en la variable lista01
 
-    char *file_name = "withdraw.txt";
+    char *file_name = "remove.txt";
 
     if (nargs > 1) {
         file_name = args[1];

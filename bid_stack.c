@@ -14,11 +14,11 @@ void createEmptyStack (tStack *stack) {
 }
 
 bool isEmptyStack (tStack stack) {
-    return (stack.top == SNULL); //Devuelve verdadero si stack.top == SNULL y falso si no
+    return (stack.top == SNULL); //Devuelve verdadero si stack.top == SNULL (La pila esta vacia) y falso si no
 }
 
 tItemS peek (tStack stack) { //Consultar la cima de la pila
-    return stack.data[stack.top]; //Devuelve el campo data correspondiente a stack.top, que es el índice del primer elemento de la lista
+    return stack.data[stack.top]; //Devuelve el campo "data" correspondiente a stack.top (índice del primer elemento de la lista)
 }
 
 void pop (tStack *stack) { //Elimina el primer elemento
@@ -26,7 +26,7 @@ void pop (tStack *stack) { //Elimina el primer elemento
 }
 
 bool push (tItemS d, tStack *stack) {
-    if (stack->top == SMAX-1) //Top ya está ariba (no podemos insertar mas)
+    if (stack->top == SMAX-1) //Top ya está arriba (no podemos insertar mas)
         return false; //Devolvemos falso
     else { //Si no
         stack->top ++; //Movemos el top una posicion

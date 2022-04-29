@@ -25,18 +25,18 @@ void award (char *param1, tList *L);
 void withdraw (char *param1, char *param2, tList *L);
 void Remove (tList *L);
 
-void deleteProduct (tPosL d, tList *L) { //Esta funcion elimina un producto tras vaciar su pila
-    tItemL Item = getItem (d, *L);
+void deleteProduct (tPosL d, tList *L) { //Esta funcion elimina un producto tras vaciar su pila (antes de invocarla, se debe comprobar que la posicion es != de nulo)
+    tItemL Item = getItem (d, *L); //Creamos una variable tipo tItemL para almacenar el elemento de la posicion d
 
     while(isEmptyStack(Item.bidStack)==false) //Mientras la pila de pujas no este vacia
-        pop (&Item.bidStack); //Borrar el elemento de la cima
+        pop(&Item.bidStack); //Borrar el elemento de la cima
 
     updateItem(Item, d, L); //Actualizamos el Item con la pila de pujas vacia
-    deleteAtPosition(d, L); //Despues de vaciar la pila (con el while), eliminamos el elemento
+    deleteAtPosition(d, L); //Despues de vaciar la pila (con el while) y actualizar el item, eliminamos el elemento
 }
 
 void new (char *param1, char *param2, char *param3, char *param4, tList *L) { //Cabecera de la función. Recibe el identificador del nuevo producto (param1), el vendedor del producto (param2), la categoría (param3) y el precio (param4)
-    tItemL newItem;
+    tItemL newItem; //Creamos una variable local para almacenar el Item antes de introducirlo en la lista
 
     if (findItem(param1,*L)!=LNULL) { //Si existe un producto en la lista con ese identificador (param1), no podemos insertar otro
         printf("+ Error: New not possible\n"); //Imprimimos un error para indicar que no se completo la operacion
@@ -71,8 +71,7 @@ void stats (tList L) { //Cabecera de la función. Solo recibe la lista y no la v
         printf("+ Error: Stats not possible\n"); //Imprimimos el mensaje de que la funcion no es realizable
     } else { //Si no esta vacia:
         for (i = first(L); i!=LNULL; i=next(i,L)) { //Recorremos la lista, desde el principio hasta el final
-            tItemL item = getItem(i,L); //Cogemos
-            // el elemento correspondiente a la posicion tPosL i y lo asignamos a la variable "item"
+            tItemL item = getItem(i,L); //Cogemos el elemento correspondiente a la posicion tPosL i y lo asignamos a la variable "item"
             if (item.bidCounter == 0) //Si la pila esta vacia (no hay ninguna puja hecha)
                 if (item.productCategory == book) //Y la categoria es book
                     printf("Product %s seller %s category book price %.2f. No bids\n", item.productId, item.seller, item.productPrice);
@@ -89,7 +88,7 @@ void stats (tList L) { //Cabecera de la función. Solo recibe la lista y no la v
                            item.seller, item.productPrice, item.bidCounter, topBidder.bidder);
                 increase = (topBidder.productPrice - item.productPrice) * 100 / item.productPrice; //Almacenamos el incremento de los dos precios (puja mas alta con respecto al precio original)
 
-                if (increase > topIncrease) { //Si el incremento del elemento que acabamos de leer (depende del for) es mayor que el que teníamos como el mas alto
+                if (increase > topIncrease) { //Si el incremento del elemento que acabamos de leer (depende del for) es mayor que el que teníamos como el mas alto, entonces
                     topIncrease = increase; //El incremento que acabamos de leer pasa a ser el mas alto
                     topProduct = item; //Y el elemento que acabamos de leer pasa a ser el que tiene el mayor incremento
                 }
@@ -204,56 +203,56 @@ void award (char *param1, tList *L) {
 }
 
 void withdraw (char *param1, char *param2, tList *L) {
-    tPosL pos = findItem(param1, *L);
-    if (pos==LNULL) {
-        printf("+ Error: withdraw not possible\n");
-    } else {
-        tItemL Item = getItem(pos, *L);
-        tItemS topPuja = peek(Item.bidStack);
-        if ( (isEmptyStack(Item.bidStack)) || (strcmp (param2, topPuja.bidder)!=0) )
-            printf("+ Error: withdraw not possible\n");
+    tPosL pos = findItem(param1, *L); //Creamos variable local para almacenar la posicion del Item con tProductId = a param1
+    if (pos==LNULL) { //Si no existe un producto con identificador = param1, es decir, la posicion es nula (findItem devolvio LNULL)
+        printf("+ Error: withdraw not possible\n"); //Imprimimos mensaje de error
+    } else { //Si no es nula
+        tItemL Item = getItem(pos, *L); //Almacenamos el item correspondiente a dicha posicion
+        tItemS topPuja = peek(Item.bidStack); //Almacenamos la puja que esta en la cima
+        if ( (isEmptyStack(Item.bidStack)) || (strcmp (param2, topPuja.bidder)!=0) ) //Si la pila de pujas esta vacia o el userId (param2) no corresponde con el autor de la puja a retirar
+            printf("+ Error: withdraw not possible\n"); //Imprimimos mensaje de error
         else {
             if (Item.productCategory == book) //Si la categoria es book
                 printf("* Withdraw: product %s bidder %s category book price %.2f bids %d\n", Item.productId, topPuja.bidder, topPuja.productPrice, Item.bidCounter);
             else //Si no es book, imprimimos el mismo mensaje cambiando la categoria por painting
                 printf("* Withdraw: product %s bidder %s category painting price %.2f bids %d\n", Item.productId, topPuja.bidder, topPuja.productPrice, Item.bidCounter);
-            pop(&Item.bidStack);
-            Item.bidCounter --;
-            updateItem(Item, pos, L);
+            pop(&Item.bidStack); //Eliminamos la mejor puja actual
+            Item.bidCounter --; //Decrementamos el contador de pujas
+            updateItem(Item, pos, L); //Actualizamos el Item para guardar los cambios
         }
     }
-
 }
 
 void Remove (tList *L) {
     tPosL i, anterior; //Creamos una variable local para recorrer la lista
-    int count=0;
+    int count=0; //Creamos un contador para saber el numero de productos con pujas
 
-    if (isEmptyList(*L)) {
-        printf("+ Error: Remove not possible\n");
-    } else {
-        for (i = first(*L); i!=LNULL;) {
-            tItemL Item =  getItem(i, *L);
-            if (Item.bidCounter==0) {
-                anterior = previous(i, *L);
-                deleteProduct(i, L);
-                if (anterior==LNULL) {
-                    if (isEmptyList(*L)){
-                        i = LNULL;
-                    } else i = first(*L);
-                } else i = next(anterior, *L);
+    if (isEmptyList(*L)) { //Si la lista esta vacia
+        printf("+ Error: Remove not possible\n"); //Imprimimos el mensaje de error porque no hay elementos
+    } else { //Si no esta vacia
+        for (i = first(*L); i!=LNULL;) { //Recorremos la lista mientras la posicion i sea distinta de nulo
+            tItemL Item =  getItem(i, *L); //Almacenamos el item de la posicion i para comprobar si tiene pujas
+            if (Item.bidCounter==0) { //Si no tiene pujas
+                anterior = previous(i, *L); //Guardamos la posicion del anterior elemento
+                deleteProduct(i, L); //Vaciamos la pila de pujas y eliminamos el elemento
+                if (anterior==LNULL) { //Si el anterior es nulo (Estamos eliminando el primero)
+                    if (isEmptyList(*L)){ //Y la lista esta vacia
+                        i = LNULL; //i pasa a ser igual a nulo (paramos el bucle)
+                    } else i = first(*L); //Si no, i pasa a ser el primero de la lista
+                } else i = next(anterior, *L); //Si el anterior no es nulo, entonces i es el siguiente a anterior
+
                 if (Item.productCategory == book) //Si la categoria es book
                     printf("Removing product %s seller %s category book price %.2f bids %d\n", Item.productId, Item.seller, Item.productPrice, Item.bidCounter); // imprime el mensaje con categoria "book"
                 else //Si no es book, imprimimos el mismo mensaje cambiando la categoria por painting
                     printf("Removing product %s seller %s category painting price %.2f bids %d\n", Item.productId, Item.seller, Item.productPrice, Item.bidCounter); // imprime el mensaje con categoria "painting"
-            } else {
-                i = next(i,*L);
-                count ++;
+
+            } else { //Si el elemento tiene pujas, entonces
+                i = next(i,*L); //Lo omitimos y pasamos al siguiente
+                count ++; //Incrementamos el contador de "elementos con pujas"
             }
         }
-        if (count==0) printf("+ Error: Remove not possible\n");
+        if (count==0) printf("+ Error: Remove not possible\n"); //Si ningun producto tiene pujas imprimimos el error porque no se pudo realizar la operacion
     }
-
 }
 
 void processCommand(char *commandNumber, char command, char *param1, char *param2, char *param3, char *param4, tList *L) {
@@ -288,7 +287,7 @@ void processCommand(char *commandNumber, char command, char *param1, char *param
             Remove (L);
             break;
         default:
-
+            printf("%c is not a valid command\n", command);
             break;
     }
 }

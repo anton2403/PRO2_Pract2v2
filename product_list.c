@@ -60,7 +60,7 @@ tPosL findPosition (tList L, tItemL d) {
 }
 
 bool insertItem (tItemL d, tList *L) {
-    tPosL p, q;//Una va a servir para crear el nodo, otra para
+    tPosL p, q;//Creamos variables locales para manejar las posiciones de la lista y crear el nodo
     if (!createNode(&q)) //Si no se puede crear el nodo
         return false; //Devolvemos falso porque no se puede insertar el Item d
     else { //Si no:
@@ -91,7 +91,7 @@ void deleteAtPosition (tPosL p, tList *L){ //Cabecera de la función. Recibe la 
         q = p->next; //q = siguiente de p
         p->data = q->data; //Asignamos al campo "data" l nodo al que apunta  p el valor del campo "data" del nodo al que apunta q
         p->next = q->next; //Asignamos al siguiente de p el siguiente de q
-        p = q; //p igual a q
+        p = q; //Asignamos a p el valor de q
     }
     free(p); //Liberamos la memoria ocupada por p
 }
@@ -106,7 +106,7 @@ void updateItem (tItemL d, tPosL p, tList *L){ //Cabecera de la función. Recibe
 
 tPosL findItem (tProductId d, tList L) {
     tPosL p; //Creamos una variable tipo tPosL para recorrer la lista
-    for (p=L; (p!=LNULL) && (strcmp(p->data.productId,d)<0); p=p->next); //Desde el prinicpio de la lista (p=L) hasta que p sea distinto de nulo y d sea mayor que p->data.productId, p = siguiente de p
+    for (p=L; (p!=LNULL) && (strcmp(p->data.productId,d)<0); p=p->next); //Desde el prinicpio de la lista (p=L) hasta que p sea distinto de nulo y d sea mayor que p->data.productId (porque la lista esta ordenada), p = siguiente de p
     if (p!=LNULL && strcmp(p->data.productId,d) == 0) //Paramos en mitad de la lista porque encontramos el dato
         return p; //Devolvemos p
     else //LLegamos al final de la lista y no lo encontramos

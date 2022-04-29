@@ -30,7 +30,7 @@ typedef struct stack {
 
 void createEmptyStack (tStack *stack);
 /*
- Objetivo: Crear una pila vacia e inicializada
+ Objetivo: Crear una pila vacia e inicializarla
  Entradas:
     Stack: Una pila tipo tStack
  Salidas:

@@ -47,7 +47,7 @@ bool push (tItemS d, tStack *stack);
  Salidas:
     Stack: Pila con el elemento Item insertado
     Bool: Devuelve verdadero si se ha podido insertar, falso en caso contrario.
- Precondiciones: La lista está inicializada
+ Precondiciones: La pila está inicializada
  */
 void pop (tStack *stack);
 /*
@@ -56,7 +56,7 @@ void pop (tStack *stack);
     Stack: Pila donde se va a eliminar el elemento (Por referencia, para que se mantengan los cambios)
  Salidas:
     Stack: Pila sin el elemento que acabamos de eliminar
- Precondiciones: La lista esta inicializada y no esta vacia
+ Precondiciones: La pila esta inicializada y no esta vacia
  */
 tItemS peek (tStack stack);
 /*
@@ -65,7 +65,7 @@ tItemS peek (tStack stack);
     Stack: Pila de la cual vamos a recuperar el elemento
  Salidas:
     Item: Elemento que hemos recuperado de la cima de la pila
- Precondiciones: La lista esta inicializada y no esta vacia
+ Precondiciones: La pila esta inicializada y no esta vacia
  */
 bool isEmptyStack (tStack stack);
 /*
@@ -74,7 +74,7 @@ bool isEmptyStack (tStack stack);
     Stack: Pila que queremos analizar
  Salidas:
     Bool: Devuelve verdadero si la pila esta vacia, falso si no lo esta.
- Precondiciones: La lista esta inicializada
+ Precondiciones: La pila esta inicializada
  */
 
 #endif
